@@ -1,5 +1,3 @@
-#![feature(naked_functions)]
-
 use dobby_rs::Address;
 use jni::JNIEnv;
 use log::{error, info, trace};
@@ -91,8 +89,9 @@ impl Module for MyModule {
 register_zygisk_module!(MyModule);
 static mut OLD_OPEN_COMMON: usize = 0;
 
-#[naked]
+#[unsafe(naked)]
 pub extern "C" fn new_open_common_wrapper() {
+    #[allow(unused_unsafe)]
     unsafe {
         naked_asm!(
             r#"
